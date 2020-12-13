@@ -1,0 +1,30 @@
+.article-content img {
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.banquan:hover {
+    background: #AFBF65;
+    color: #FFF;
+}
+
+.banquan {
+    height: 30px;
+    line-height: 30px;
+    word-wrap: break-word;
+    padding: 0;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: 500;
+}
+
+p {
+    line-height: unset;
+}
+
+body {
+    line-height: 1.42857143;
+}

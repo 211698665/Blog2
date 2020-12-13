@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>博文空间管理系统</title>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/font-awesome.min.css">
+    <link rel="apple-touch-icon-precomposed" href="/static/admin/images/icon/icon.png">
+    <link rel="shortcut icon" href="/static/admin/images/icon/favicon.ico">
+    <link rel="stylesheet" href="/static/admin/css/comment.css"/>
+    <script src="/static/admin/js/jquery-2.1.4.min.js"></script>
+    <style>
+        .mini-dialog-footer {
+            height: 60px !important;
+        }
+    </style>
+</head>
+<body class="user-select">
+<section class="container-fluid">
+    <header>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span
+                            class="sr-only">切换导航</span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                        <span class="icon-bar"></span></button>
+                    <div style="height: 50px;text-align: center;line-height: 50px;width: 200px">
+                        <img src="/static/user/images/logo2.png" alt="" style="height: 80%;">
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">欢迎：<span style="color: red"
+                                                              th:text="${session.user.userName}"> </span></a>
+
+                        </li>
+                        <li>
+                            <a href="/admin/login" onClick="if(!confirm('是否确认退出？'))return false;">退出登录</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="row">
+        <aside class="col-sm-3 col-md-2 col-lg-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/admin/index">首页</a>
+                </li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="active">
+                    <a href="/admin/article">文章</a>
+                </li>
+                <li>
+                    <a href="/admin/sort">类别</a>
+                </li>
+                <li>
+                    <a href="/admin/photo">相册</a>
+                </li>
+                <li>
+                    <a href="/admin/notice">公告</a>
+                </li>
+                <li>
+                    <a href="/admin/comment">评论</a>
+                </li>
+                <li>
+                    <a href="/admin/music">音乐</a>
+                </li>
+
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/admin/saying">每日一言</a>
+                </li>
+                <li>
+                    <a href="/admin/timeline">程序历程</a>
+                </li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a class="dropdown-toggle" id="userMenu" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">我的</a>
+                    <ul class="dropdown-menu" aria-labelledby="userMenu">
+                        <li>
+                            <a href="/admin/ability">实战技能</a>
+                        </li>
+                        <li>
+                            <a href="/admin/detail">个人资料</a>
+                        </li>
+                        <li>
+                            <a href="/admin/flink">友情链接</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+            <form action="/admin/article?Sea=1" method="post">
+                <h1 class="page-header">操作</h1>
+                <ol class="breadcrumb" style="width: 100%;float: left;">
+                    <li style="width: 100%;float: left;text-align: center">
+                        <div style="float: left;width:22%;height:34px;display: inline-block;line-height: 34px; font-size: 16px;margin: 0 auto;">
+                            <a href="/admin/addArticlePage"
+                               style="background-color: white;height: 34px;display: inline-block;border-radius: 3px;">&nbsp;+添加文章&nbsp;</a>
+                        </div>
+                        <div style="float: left;display: inline-block;width: 70%;">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="articleTitle"
+                                       th:value="${Article != null}?${Article.articleTitle }:''" autocomplete="off"
+                                       placeholder="输入关键字" maxlength="15" style="width: 32%">
+
+                                <div class="form-control"
+                                     style="width: 21%;display: inline-block;float:right;margin-right: 4%">
+                                    <ul class="category-list">
+                                        <li style="float:left;"
+                                            th:switch="${Article!= null and Article.articleStatus == 1 }">
+                                            <label th:case="true">
+                                                正常：<input name="articleStatus" type="radio" value="1" checked>
+                                            </label>
+                                            <label th:case="false">
+                                                正常：<input name="articleStatus" type="radio" value="1">
+                                            </label>
+                                        </li>
+                                        <li style="float: left"
+                                            th:switch="${Article!= null and Article.articleStatus == 2 }">
+                                            <label th:case="true">
+                                                异常：<input name="articleStatus" type="radio" value="2" checked>
+                                            </label>
+                                            <label th:case="false">
+                                                异常：<input name="articleStatus" type="radio" value="2">
+                                            </label>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <span class="form-control"
+                                      style="display: inline-block;float: right;width: 9%;">状态</span>
+                                <span class="form-control"
+                                      style="display: inline-block;float: left;width: 9%;margin-left: 2%">分类</span>
+                                <select id="category-fname" class="form-control" name="articleLike"
+                                        style="width: 20%;float: left;">
+                                    <option th:value="${categoryChosed != null}?${categoryChosed.categoryId }:''"
+                                            th:text="${categoryChosed != null}?${categoryChosed.categoryName}:'请选择'"></option>
+                                    <option th:each="allcategory:${allcategorys}" th:value="${allcategory.categoryId}"
+                                            th:text="${allcategory.categoryName }"></option>
+                                </select>
+                                <span class="input-group-btn" style="margin-left: 4%">
+											  <button class="btn btn-default" type="submit">检索文章</button>
+											</span>
+                            </div>
+
+                        </div>
+
+                    </li>
+                </ol>
+            </form>
+            <h1 class="page-header">管理</h1>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th><span class="glyphicon glyphicon-th-large"></span> <span class="visible-lg">选择</span></th>
+                        <th><span class="glyphicon glyphicon-paperclip"></span> <span class="visible-lg">ID</span></th>
+                        <th style="width: 400px"><span class="glyphicon glyphicon-file"></span> <span
+                                class="visible-lg">标题</span></th>
+                        <th class="hidden-sm"><span class="glyphicon glyphicon-tag"></span> <span
+                                class="visible-lg">分类</span></th>
+                        <th class="hidden-sm"><span class="glyphicon glyphicon-stats"></span> <span class="visible-lg">状态</span>
+                        </th>
+                        <th style="width: 200px"><span class="glyphicon glyphicon-time"></span> <span
+                                class="visible-lg">更新时间</span></th>
+                        <th style="width: 120px;"><span class="glyphicon glyphicon-pencil"></span> <span
+                                class="visible-lg">操作</span></th>
+                    </tr>
+                    </thead>
+                    <tbody id="articles">
+                    <tr th:each="article:${articlelist}">
+                        <td><input type="checkbox" class="input-control" name="checkbox[]" value=""/></td>
+                        <td th:text="${article !=null }?${article.articleId }:''"></td>
+                        <td class="article-title" th:text="${article !=null }?${article.articleTitle }:''"></td>
+                        <td class="hidden-sm" th:text="${article !=null }?${article.articleLike }:''"></td>
+                        <td class="hidden-sm" th:text="${article !=null }?${article.articleStatus }:''"></td>
+                        <td th:text="${article !=null }?${article.articleUpdatetime }:''"></td>
+                        <td>
+                            <a th:href="@{'/admin/updateArticlePage?id='+${article.articleId}}">修改</a>
+                            <a rel="6" href="javascript:void(0)"
+                               th:onclick="'delArticle('+${article.articleId}+');'">删除</a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <footer class="message_footer" style="text-align: center">
+                <nav th:switch="${Article!=null}">
+                    <ul th:case="true" class="pagination" style="margin: 0 auto;margin-top: -10px">
+                        <li>
+                            <a href="/admin/article?Sea=1&pn=1">首页</a>
+                        </li>
+                        <li th:if="${currPage -1 >0}">
+                            <a th:href="@{'/admin/article?Sea=1&pn='+${currPage - 1}}">上一页</a>
+                        </li>
+                        <li class="active">
+                            <a class="currentPage" th:text="${currPage}"></a>
+                        </li>
+                        <li th:if="${currPage <pageSize}">
+                            <a th:href="@{'/admin/article?Sea=1&pn='+${currPage + 1}}">下一页</a>
+                        </li>
+                        <li>
+                            <a th:href="@{'/admin/article?Sea=1&pn='+${pageSize}}">尾页</a>
+                        </li>
+                        <input style="display: none" class="Sea" value="1">
+                    </ul>
+                    <ul th:case="false" class="pagination" style="margin: 0 auto;margin-top: -10px">
+                        <li>
+                            <a href="/admin/article?pn=1">首页</a>
+                        </li>
+                        <li th:if="${currPage -1 >0}">
+                            <a th:href="@{'/admin/article?pn='+${currPage - 1}}">上一页</a>
+                        </li>
+                        <li class="active">
+                            <a class="currentPage" th:text="${currPage}"></a>
+                        </li>
+                        <li th:if="${currPage <pageSize}">
+                            <a th:href="@{'/admin/article?pn='+${currPage + 1}}">下一页</a>
+                        </li>
+                        <li>
+                            <a th:href="@{'/admin/article?pn='+${pageSize}}">尾页</a>
+                        </li>
+                        <input style="display: none" class="Sea" value="2">
+                    </ul>
+                </nav>
+            </footer>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script src="/static/admin/js/bootstrap.min.js"></script>
+<script src="/static/admin/js/admin-scripts.js"></script>
+<script src="/static/admin/js/MiniDialog-es5.min.js"></script>
+<script>
+    function delArticle(id) {
+        Dialog({
+            title: "删除",
+            content: "确定删除文章吗",
+            ok: {
+                callback: function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/articleDel",
+                        data: {"id": id, "pn": $('.currentPage').text(), "Sea": $('.Sea').val()},
+                        dataType: "json",
+                        //async:true,//同步为false，异步为true
+                        cache: false, //不缓存此页面
+                        success: function (data) {
+                            if (data != null)
+                                $('#articles').empty();//清空内容
+                            var i = 0;
+                            for (i; i < data.length; i++) {
+                                $('#articles').append("<tr>"
+                                    + "<td><input type='checkbox' class='input-control' name='checkbox' value='' /></td>"
+                                    + "<td >" + data[i].articleId + "</td>"
+                                    + "<td >" + data[i].articleTitle + "</td>"
+                                    + "<td >" + data[i].articleLike + "</td>"
+                                    + "<td >" + data[i].articleStatus + "</td>"
+                                    + "<td >" + data[i].articleUpdatetime + "</td>"
+                                    + "<td><a href=/admin/updateArticlePage?id=" + data[i].articleId + ">修改 </a>"
+                                    + "<a rel='6' href='javascript:void(0)' onclick='delArticle(" + data[i].articleId + ");'>删除</a>"
+                                    + "</td>"
+                                    + "</tr>")
+                            }
+                            ;
+                            //window.location.href="/admin/article";
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            console.log(errorThrown);
+                        }
+                    });
+                }
+            },
+            cancel: {
+                callback: function () {
+                    console.log("取消删除");
+                }
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

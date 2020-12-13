@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>syw的博文空间</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon-precomposed" href="/static/user/images/icon/icon.png">
+    <link rel="shortcut icon" href="/static/user/images/icon/favicon.ico">
+    <link rel="stylesheet" href="/static/user/css/reset.css"/>
+    <link rel="stylesheet" href="/static/user/css/baguetteBox.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/user/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/nprogress.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/skPlayer.css">
+    <link rel="stylesheet" href="/static/user/css/cl-css.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/user/css/style.css">
+    <script src="/static/user/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/user/js/nprogress.js"></script>
+    <script src="/static/user/js/jquery.lazyload.min.js"></script>
+    <script type="text/javascript" src="/static/user/js/skPlayer.min.js"></script>
+    <link rel="stylesheet" href="/static/user/css/main.css"/>
+    <link rel="stylesheet" href="/static/user/css/me.css">
+    <link rel="stylesheet" href="/static/user/css/background.css"/>
+    <style>
+        .progress-bar-warning {
+            background-color: #b3deda;
+        }
+
+        .progress-bar-success {
+            background-color: #d0a890;
+        }
+
+        #leftMyDetail {
+            display: inline-block;
+        }
+
+        @media only screen and (max-width: 500px) {
+            #leftMyDetail {
+                display: none;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header class="header" id="main_top">
+    <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#header-navbar" aria-expanded="false"><span class="sr-only"></span> <span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+                <h1 class="logo hvr-bounce-in"><a href="" title=""><img src="/static/user/images/logo2.png" alt=""
+                                                                        style="height: 80%;"></a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="header-navbar">
+                <ul class="nav navbar-nav navbar-right userMenu">
+                    <li>
+                        <a href="/">博客首页</a>
+                    </li>
+                    <li>
+                        <a href="/user/sort">博文分类</a>
+                    </li>
+                    <li>
+                        <a href="/user/time">时光机器</a>
+                    </li>
+                    <li>
+                        <a href="/user/photo">流年似水</a>
+                    </li>
+                    <li class="hidden-index active">
+                        <a href="/user/me">关于博主</a>
+                    </li>
+                    <li>
+                        <a href="/user/chatindex">聊天室</a>
+                    </li>
+                </ul>
+                <form class="navbar-form visible-xs" action="/user/searchList" method="post">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="请输入关键字" maxlength="20"
+                               autocomplete="off">
+                        <span class="input-group-btn">
+					            <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+					            </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+<section class="container">
+    <div class="content-wrap">
+        <div class="content">
+            <div class="container_me" style="min-height:1454px;border-radius: 4px">
+                <div id="header" class="row">
+                    <div>
+                        <h2 style="text-align: center; font-family: '楷体';color: #2999c2">关于博主</h2>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-sm-3 mobmid">
+                                <span class="secicon fa fa-home"
+                                      style="color: #5cb85c;display: inline-block;width: 20%"></span>
+                                <h3 style="width: 70%;float: right">我的信息 </h3>
+                            </div>
+                            <div class="col-sm-12">
+                                <div style="height: 26px"></div>
+                                <div style="margin: 0 auto;" id="leftMyDetail">
+                                    <div class="p_connect">
+                                        年龄:&nbsp;<span th:text="${me.userAge}"></span>岁
+                                    </div>
+                                    <div style="height: 36px;margin: 0 auto"></div>
+                                    <div class="p_connect">
+                                        Q&nbsp;&nbsp;Q:&nbsp;<span th:text="${me.userQq}"></span>
+                                    </div>
+                                    <div style="height: 36px;"></div>
+                                    <div class="p_connect">
+                                        在线：<span th:text="${me.onlineTime}"></span>
+                                    </div>
+                                    <div style="height: 36px;"></div>
+                                    <div class="p_connect">
+                                        微信：<span>右侧扫码</span>
+                                    </div>
+                                    <div style="height: 42px;"></div>
+                                </div>
+                                <div style="height: 140px;" id="rightMyDetail">
+                                    <img style="height: 140px;width: 140px" src="/static/user/images/Myweixin.jpg"/>
+                                </div>
+                                <div style="height: 8px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div>
+                        <hr class="firsthr">
+                        <div class="col-md-12 ">
+                            <div class="row">
+                                <div class="col-sm-3 mobmid">
+                                    <span class="secicon fa fa-inbox"
+                                          style="color: #d9b64f;display: inline-block;width: 20%"></span>
+                                    <h3 style="width: 70%;float: right">实战技能 </h3>
+                                </div>
+                                <div class="col-sm-12 ">
+                                    <div style="height: 26px"></div>
+                                    <div class="p_ablity" th:each="ab:${ability}">
+                                        <p class="p_name" th:text="${ab.abilityName}"></p>
+                                        <div class="progress jindu progress-striped"
+                                             th:switch="${ab!= null and ab.abilityId % 2==0 }">
+                                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                                 th:case="true" th:aria-valuenow="${ab.abilityNum}" aria-valuemin="0"
+                                                 aria-valuemax="100" th:style="'width:'+${ab.abilityNum}+'%'">
+                                                <span class="sr-only" th:text="${ab.abilityNum}">  </span>
+                                            </div>
+                                            <div class="progress-bar progress-bar-warning" role="progressbar"
+                                                 th:case="false" th:aria-valuenow="${ab.abilityNum}" aria-valuemin="0"
+                                                 aria-valuemax="100" th:style="'width:'+${ab.abilityNum}+'%'">
+                                                <span class="sr-only" th:text="${ab.abilityNum}">  </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="height: 8px"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="col-md-12 ">
+                            <div id="statements" class="row mobmid">
+                                <div class="col-sm-3 mobmid">
+                                    <span class="secicon fa fa-user"
+                                          style="color: #3399CC;display: inline-block;width: 20%"></span>
+                                    <h3 style="width: 70%;float: right">自我评价 </h3>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div style="height: 20px"></div>
+                                    <p id="myIntru" style="line-height: 1.8;font-size: 16px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在生活中，开朗，稳重，待人真诚，乐于助人。具有较强的组织能力、实际动手能力和团体协作精神。能迅速的适应各种环境，并融合其中。同时我也会经常反省，不断提高自己的各方面素质。
+                                        在学习中，具备基本的自主学习能力和科研素养，在掌握基础理论的同时，认真对待实践环节，力求理论和实践相结合。不求最好，只求更好。这大大提高了我分析问题、解决问题的能力，同时也提高了我对待问题的专注度。
+                                        现在的我，对学习和生活充满热情，乐于面对生活和学习中的每一个困难和挑战，并享受这种充实而忙碌的生活。
+                                    </p>
+                                    <div style="height: 22px"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 ">
+                            <div id="statement" class="row mobmid">
+                                <div class="col-sm-3 mobmid">
+                                    <span class="secicon fa fa-link"
+                                          style="color: lightsalmon;display: inline-block;width: 20%"></span>
+                                    <h3 style="width: 70%;float: right">友情链接 </h3>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div style="height: 30px"></div>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-md-3" th:each="link:${links}">
+                                            <a th:href="@{${link.linkUrl}}" target="_blank">
+                                                <div class="thumbnail p_link" style="height: 160px">
+                                                    <img th:src="@{${link.linkImg}}" style="opacity: 0.7">
+                                                    <div class="caption">
+                                                        <p th:text="${link.linkName}"></p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <aside class="sidebar">
+        <div class="">
+            <div class="widget widget-tabs"
+                 style="text-align: center ;padding-left: 130px;padding-top: 30px;height: 328px;margin-top: -1px; border-top:1px solid lightgray;box-sizing: border-box;">
+                <div style="height: 100px; width: 100px;border-radius: 50px;overflow: hidden;opacity: 0.8 ">
+                    <img th:src="@{${me.userImage}}" style="height: 100px; width: 100px;"/>
+                </div>
+                <div style="margin-left: -130px;">
+                    <br/>
+                    <p class="text-primary text-center"
+                       style="font-family: '楷体';font-size: 20px;color: #646869;margin-bottom: 12px;">
+                        <span style="color: #dc4343;font-family: Consolas;border-radius: 4px;padding:0 5px;margin-right: 4px"
+                              th:text="${me.userName}">SYW</span><b>的博文<span style="color: #3194c2;">空间</span></b></p>
+                    <p class="text-info text-center"
+                       style="margin-top: 6px;font-family: '楷体';font-size: 20px; color: #646869;">
+                        Email:<span th:text="${me.userMail}"></span></p>
+                    <p class="text-info text-center" style="margin-top: 10px;">
+                        <a href="#" style="text-decoration: none ;font-family: '楷体';font-size: 18px; color: #646869;"
+                           th:switch="${me.userSex == 1 }"><b>博主性别</b>: &nbsp;<span th:case="true" class="bg-success"
+                                                                                    style="display: inline-block;height: 26px; width: 60px;border-radius:16px;color: #2FC72F;">男</span><span
+                                th:case="false" class="bg-success"
+                                style="display: inline-block;height: 26px; width: 60px;border-radius:16px;color: #2FC72F;">女</span></a>
+                    </p>
+                    <p class="text-info text-center" style="margin-top: 10px;">
+
+                        <a href="#" style="text-decoration: none;font-family: '楷体';font-size: 18px; color: #646869;"><b>博主位置</b>:
+                            &nbsp;<span class="bg-success"
+                                        style="display: inline-block;height: 26px; width: 60px;border-radius: 16px;color: #2FC72F;"
+                                        th:text="${me.userAddress}">南京</span></a>
+                    </p>
+                </div>
+            </div>
+            <div class="widget widget_search" style="box-sizing: border-box;">
+                <form class="navbar-form" action="/user/searchList" method="post">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字"
+                               th:value="${keyword !=null }?${keyword}:''" maxlength="15" autocomplete="off">
+                        <span class="input-group-btn">
+            <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+            </span></div>
+                </form>
+            </div>
+        </div>
+        <div class="widget widget_medio" style="width: 360px; height: 245px;box-sizing: border-box;">
+            <h3>
+                <a href="#" style="color: limegreen;">
+                    <span class="glyphicon glyphicon-music"></span>
+                </a>
+                &nbsp;&nbsp;动听音乐
+            </h3>
+            <div id="skPlayer" style=""></div>
+        </div>
+        <div class="widget widget_sentence" style="box-sizing: border-box;">
+            <h3>
+                <a href="#" style="color: mediumpurple;">
+                    <span class="glyphicon glyphicon-th"></span>
+                </a>
+                &nbsp;&nbsp;分类标签
+
+            </h3>
+            <div class="widget-sentence-content" style="padding-bottom: 0px;">
+                <div style="font-size: 16px;height: 214px">
+                    <a th:each="categorylist:${categorysList}" th:class="${categorylist.categoryDesc}"
+                       th:text="${categorylist.categoryName}"
+                       style="font-weight: normal;font-size: 14px;color: white;display: inline-block;margin: 4px 5px;width: 72px;box-shadow: 0px 0px 1px 1px #e7e2ea;"></a>
+                </div>
+            </div>
+        </div>
+        <div class="widget widget_hot" style="box-sizing: border-box;">
+            <h3>
+                <a href="#" style="color: red;">
+                    <span class="glyphicon glyphicon-fire"></span>
+                </a>
+                &nbsp;&nbsp;热门文章
+            </h3>
+            <ul>
+                <li th:each="topArticle:${topListHot}">
+                    <a th:href="@{'/user/artdetail?id='+${topArticle.articleId}}">
+								<span class="thumbnail" style="display: inline-block; width: 70px; height: 70px;">
+				        			<img class="thumb" th:src="@{${topArticle.articleImage}}"
+                                         style="width: 100%; height: 100%;" alt="">
+				        		</span>
+                        <span style="display: inline-block;height: 2px;padding: 0px;margin: 0px;"></span>
+                        <span class="text"
+                              style="color: #72d0eb;font-size: 15px; margin-left: -45px; margin-top: -10px;"
+                              th:text="${topArticle !=null }?${topArticle.articleTitle }:''"></span>
+                        <div style="height: 11px;padding: 0px;margin: 0px;"></div>
+                        <span class="muted" style="margin-left: -45px;">
+				        			<i class="glyphicon glyphicon-time"></i> <span
+                                th:text="${topArticle !=null }?${topArticle.articleUpdatetime }:''"></span>
+				        		</span>
+                        <span class="muted" style="margin-left: 10px;">
+				        			<i class="glyphicon glyphicon-eye-open"></i> <span
+                                th:text="${topArticle !=null }?${topArticle.articleClick }:''"></span>
+				        		</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+</section>
+<footer class="footer">
+    <div class="container">
+        <p>&copy;C<font style="text-transform:lowercase;">opyright</font> &nbsp;河南大学 <a href="">2016级软件工程</a> &nbsp; <a
+                href="#" target="_blank" rel="nofollow">syw的博文空间</a> &nbsp; &nbsp;<a
+                href="http://www.beian.miit.gov.cn/" target="_blank">豫ICP备20004461号-1</a></p>
+    </div>
+    <div id="gotop"><a class="gotop"></a></div>
+</footer>
+<script src="/static/user/js/bootstrap.min.js"></script>
+<script src="/static/user/js/scripts.js"></script>
+<script>
+    var player = new skPlayer({
+        autoplay: false,
+        listshow: true,
+        /*music: {
+            type: 'cloud',
+            source: 71384707
+        }*/
+        music: {
+            type: 'file',
+            source: [{
+                name: '飞云之下',
+                author: '林俊杰&韩红',
+                src: '/static/user/music/飞云之下.mp3',
+                cover: '/static/user/images/musicImg/fyzx.png'
+            },
+
+                {
+                    name: '大鱼',
+                    author: '周深',
+                    src: '/static/user/music/dy.mp3',
+                    cover: '/static/user/images/musicImg/dy.jpg'
+                },
+                {
+                    name: '明天会放晴吗',
+                    author: '桑田佳祐',
+                    src: '/static/user/music/mthfqm.mp3',
+                    cover: '/static/user/images/musicImg/mth.jpg'
+                }
+            ]
+        }
+    });
+</script>
+
+</body>
+</html>

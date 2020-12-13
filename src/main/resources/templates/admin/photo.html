@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8"/>
+    <title>博文空间管理系统</title>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/font-awesome.min.css">
+    <link rel="apple-touch-icon-precomposed" href="/static/admin/images/icon/icon.png">
+    <link rel="shortcut icon" href="/static/admin/images/icon/favicon.ico">
+    <link rel="stylesheet" href="/static/admin/css/comment.css"/>
+    <script src="/static/admin/js/jquery-2.1.4.min.js"></script>
+    <style>
+        .photo_btn1 {
+            padding: 3px 6px;
+            float: left;
+        }
+
+        img[src=""], img:not([src]) {
+            opacity: 0;
+        }
+
+        .photo_btn2 {
+            padding: 3px 6px;
+            float: right;
+            background-color: #de6c6c;
+            border-color: #de6c6c;
+            color: white;
+        }
+
+        .photo_btn2:hover {
+            color: white;
+        }
+
+        .photo_cap {
+            height: 60px;
+        }
+
+        .photo_title {
+            height: 34px;
+            padding: 0 10px;
+        }
+
+        .mini-dialog-footer {
+            height: 60px !important;
+        }
+    </style>
+</head>
+
+<body class="user-select">
+<section class="container-fluid">
+    <header>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span
+                            class="sr-only">切换导航</span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                        <span class="icon-bar"></span></button>
+                    <div style="height: 50px;text-align: center;line-height: 50px;width: 200px">
+                        <img src="/static/user/images/logo2.png" alt="" style="height: 80%;">
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">欢迎：<span style="color: red"
+                                                              th:text="${session.user.userName}"> </span></a>
+
+                        </li>
+                        <li>
+                            <a href="/admin/login" onClick="if(!confirm('是否确认退出？'))return false;">退出登录</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="row">
+        <aside class="col-sm-3 col-md-2 col-lg-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/admin/index">首页</a>
+                </li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/admin/article">文章</a>
+                </li>
+                <li>
+                    <a href="/admin/sort">类别</a>
+                </li>
+                <li class="active">
+                    <a href="/admin/photo">相册</a>
+                </li>
+                <li>
+                    <a href="/admin/notice">公告</a>
+                </li>
+                <li>
+                    <a href="/admin/comment">评论</a>
+                </li>
+                <li>
+                    <a href="/admin/music">音乐</a>
+                </li>
+
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/admin/saying">每日一言</a>
+                </li>
+                <li>
+                    <a href="/admin/timeline">程序历程</a>
+                </li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a class="dropdown-toggle" id="userMenu" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">我的</a>
+                    <ul class="dropdown-menu" aria-labelledby="userMenu">
+                        <li>
+                            <a href="/admin/ability">实战技能</a>
+                        </li>
+                        <li>
+                            <a href="/admin/detail">个人资料</a>
+                        </li>
+                        <li>
+                            <a href="/admin/flink">友情链接</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+            <div class="row">
+                <div class="col-md-5">
+                    <h1 class="page-header">添加</h1>
+                    <form action="/admin/photoAdd" enctype="multipart/form-data" method="post" autocomplete="off">
+                        <div class="form-group">
+                            <label for="category-name">图片标题</label>
+                            <input type="text" id="category-name" name="photoTitle" class="form-control" required
+                                   autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="category-describe">图片描述</label>
+                            <textarea class="form-control" id="category-describe" name="photoDesc" rows="4"
+                                      autocomplete="off"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="category-name">上传图片</label>
+                            <div class="add-article-box">
+                                <div class="add-article-box-content" style="height: 80px;">
+                                    <div class="input-group"
+                                         style="height: 40px;float: left; width: 80%;margin-top: 10px;">
+                                        <input type="file" id="url1" name="photoFile"
+                                               style="height: 0px; width: 1px; margin: 0px; " value=""/>
+                                        <input type="text" id="url2" name="photoUrl" style="height: 40px;"
+                                               class="form-control">
+                                        <span class="input-group-btn">
+													<button class="btn btn-default" style="height: 40px;"
+                                                            onclick="getimgfils()" type="button">+图片上传</button>
+												</span>
+                                    </div>
+                                    <!-- /input-group -->
+                                    <div style="width: 18%;float: right; height: 60px;">
+                                        <img src="" id="img" style="height: 60px; width: 100%;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="category-name">状态</label>
+                            <div class="add-article-box-content">
+                                <ul class="category-list">
+                                    <li>
+                                        <label>
+                                            <input name="photoStatus" type="radio" value="1">
+                                            正常 <em class="hidden-md">( 状态ID: <span>1</span> )</em></label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input name="photoStatus" type="radio" value="2">
+                                            隐私<em class="hidden-md">( 状态ID: <span>2</span> )</em></label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="submit">发布</button>
+                    </form>
+                </div>
+                <div class="col-md-7">
+                    <h1 class="page-header">管理 </h1>
+                    <ol class="breadcrumb"
+                        style="padding-bottom: 8px;margin-bottom: 15px;margin-top: 30px;text-align: center">
+                        <li>
+                            <div style="float: left;display: inline-block;width: 100%;">
+                                <form action="/admin/photo?Psea=1" method="post" class="navbar-form navbar-right"
+                                      role="search">
+                                    <div class="input-group">
+                                        <input type="text" name="photoTitle"
+                                               th:value="${Photo != null}?${Photo.photoTitle }:''" class="form-control"
+                                               autocomplete="off" placeholder="输入关键字" maxlength="15" style="width: 34%">
+
+                                        <div class="form-control"
+                                             style="width: 44%;display: inline-block;float:right;margin-right: 4%">
+                                            <ul class="category-list">
+                                                <li style="float:left;"
+                                                    th:switch="${Photo!= null and Photo.photoStatus == 1 }">
+                                                    <label th:case="true">
+                                                        可见：<input name="photoStatus" type="radio" value="1" checked>
+                                                    </label>
+                                                    <label th:case="false">
+                                                        可见：<input name="photoStatus" type="radio" value="1">
+                                                    </label>
+                                                </li>
+                                                <li style="float: left"
+                                                    th:switch="${Photo!= null and Photo.photoStatus == 2 }">
+                                                    <label th:case="true">
+                                                        隐私：<input name="photoStatus" type="radio" value="2" checked>
+                                                    </label>
+                                                    <label th:case="false">
+                                                        隐私：<input name="photoStatus" type="radio" value="2">
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <span class="form-control"
+                                              style="display: inline-block;float: right;width: 16%;">状态</span>
+                                        <span class="input-group-btn" style="margin-left: 4%">
+											  <button class="btn btn-default" type="submit">检索照片</button>
+											</span>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </li>
+                    </ol>
+                    <div class="table-responsive">
+                        <div class="col-sm-6 col-md-3" th:each="photo:${photolist}">
+                            <div class="thumbnail">
+                                <img style="height: 100px; width: 120px; margin-top: 6px;" th:src="@{${photo.photoUrl}}"
+                                     alt="通用的占位符缩略图">
+                                <div class="caption photo_cap" style="height: 76px;">
+                                    <div class="photo_title">
+                                        <h6 th:text="${photo.photoTitle}"></h6>
+                                    </div>
+                                    <div style="height: 20px;">
+                                        <a href="javascript:void(0)"
+                                           th:href="@{'/admin/updatePhotoPage?id='+${photo.photoId}}"
+                                           class="btn btn-primary photo_btn1" role="button">
+                                            修改
+                                        </a>
+                                        <a href="javascript:void(0)" th:onclick="'delPhoto('+${photo.photoId}+');'"
+                                           class="btn  photo_btn2" role="button">
+                                            删除
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-left: 40%;" th:switch="${Photo!=null}">
+                        <ul class="pagination" style="margin-top: 10px" th:case="true">
+                            <li>
+                                <a href="/admin/photo?Psea=1&pn=1">首页</a>
+                            </li>
+                            <li th:if="${currPage -1 >0}">
+                                <a th:href="@{'/admin/photo?Psea=1&pn='+${currPage - 1}}">上一页</a>
+                            </li>
+                            <li class="active">
+                                <a th:text="${currPage}"></a>
+                            </li>
+                            <li th:if="${currPage <pageSize}">
+                                <a th:href="@{'/admin/photo?Psea=1&pn='+${currPage + 1}}">下一页</a>
+                            </li>
+                            <li>
+                                <a th:href="@{'/admin/photo?Psea=1&pn='+${pageSize}}">尾页</a>
+                            </li>
+                        </ul>
+                        <ul class="pagination" style="margin-top: 10px" th:case="false">
+                            <li>
+                                <a href="/admin/photo?pn=1">首页</a>
+                            </li>
+                            <li th:if="${currPage -1 >0}">
+                                <a th:href="@{'/admin/photo?pn='+${currPage - 1}}">上一页</a>
+                            </li>
+                            <li class="active">
+                                <a th:text="${currPage}"></a>
+                            </li>
+                            <li th:if="${currPage <pageSize}">
+                                <a th:href="@{'/admin/photo?pn='+${currPage + 1}}">下一页</a>
+                            </li>
+                            <li>
+                                <a th:href="@{'/admin/photo?pn='+${pageSize}}">尾页</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="/static/admin/js/bootstrap.min.js"></script>
+<script src="/static/admin/js/admin-scripts.js"></script>
+<script src="/static/admin/js/MiniDialog-es5.min.js"></script>
+<script>
+    function getimgfils() {
+        $('input[id=url1]').click();
+        $('input[id=url1]').change(function () {
+            $('#url2').val($(this).val());
+        });
+    }
+
+    $("#url1").change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#img").attr("src", objUrl);
+        }
+    });
+
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) {
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) {
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) {
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    function delPhoto(id) {
+        Dialog({
+            title: "删除",
+            content: "确定删除这张图片吗",
+            ok: {
+                callback: function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/photoDel",
+                        data: "id=" + id,
+                        dataType: "text",
+                        async: true,//同步为false，异步为true
+                        cache: false, //不缓存此页面
+                        success: function (data) {
+                            if (data != null && data == "success") //注意js中比较字符串相等使用的是==
+                                window.location.href = "/admin/photo";
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            console.log(errorThrown);
+                        }
+                    });
+                }
+            },
+            cancel: {
+                callback: function () {
+                    console.log("取消删除");
+                }
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

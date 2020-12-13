@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>syw的博文空间</title>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon-precomposed" href="/static/user/images/icon/icon.png">
+    <link rel="shortcut icon" href="/static/user/images/icon/favicon.ico">
+    <link rel="stylesheet" href="/static/user/css/cl-css.css"/>
+    <link rel="stylesheet" th:href="@{/webjars/mdui/dist/css/mdui.css}">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/chatMusic.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/style.css">
+    <script src="/static/user/js/jquery-2.1.4.min.js"></script>
+    <script th:src="@{/webjars/mdui/dist/js/mdui.js}"></script>
+    <script src="/static/user/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/user/js/spig.js"></script>
+    <link rel="stylesheet" href="/static/user/css/spigPet.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/user/css/main.css"/>
+    <style>
+        body {
+            height: 610px;
+            overflow: hidden;
+        }
+
+        #sendChat {
+            float: left;
+        }
+
+        .mdui-chip {
+            background-color: white;
+        }
+
+        #clearBoard {
+            float: right;
+            margin-right: 160px;
+        }
+
+        #tempPos {
+            height: 320px;
+        }
+
+        #musicPos {
+            margin-left: 10%;
+        }
+
+        #disTemp {
+            height: 8px;
+        }
+
+        .content-wrap {
+            height: 680px;
+            min-height: 670px;
+            overflow: auto
+        }
+
+        #sendMsgPos {
+            width: 80%;
+            margin-left: -8%;
+        }
+
+        #huanYing {
+            margin-left: -14%;
+        }
+
+        #Myfooter {
+            position: absolute;
+            bottom: 0px;
+            width: 100%
+        }
+
+        @media only screen and (max-width: 500px) {
+            #fasong {
+                color: #7ce7ab;
+            }
+
+            #huanYing {
+                margin-left: 0px;
+            }
+
+            #sendMsgPos {
+                width: 84%;
+                margin-left: 0;
+            }
+
+            #background {
+                background: none;
+            }
+
+            body {
+                background-image: url("/static/user/images/preview.jpg");
+                background-size: cover;
+                background-position: left top;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                opacity: 0.7;
+                height: 980px;
+            }
+
+            #clearBoard {
+                width: 100%;
+                float: none;
+                margin-right: 0;
+            }
+
+            .content-wrap {
+                height: 1280px;
+                min-height: 1270px;
+                overflow: auto
+            }
+
+            #musicPos {
+                margin-left: 8%;
+            }
+
+            #sendChat {
+                width: 100%;
+                float: none;
+            }
+
+            #tempPos {
+                height: 40px;
+            }
+
+            #disTemp {
+                height: 50px;
+            }
+
+            #ip_add {
+                display: none;
+            }
+
+            #spig {
+                display: none;
+            }
+
+            #Myfooter {
+                display: none;
+            }
+        }
+    </style>
+
+</head>
+<body>
+<header class="header" id="main_top">
+    <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#header-navbar" aria-expanded="false">
+                    <span class="sr-only"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <h1 class="logo hvr-bounce-in" style="margin: 0px">
+                    <a href="" title=""><img src="/static/user/images/logo2.png" alt="" style="height: 80%;"></a>
+                </h1>
+            </div>
+            <div class="collapse navbar-collapse" id="header-navbar">
+                <ul class="nav navbar-nav navbar-right userMenu">
+                    <li>
+                        <a href="/">博客首页</a>
+                    </li>
+                    <li>
+                        <a href="/user/sort">博文分类</a>
+                    </li>
+                    <li>
+                        <a href="/user/time">时光机器</a>
+                    </li>
+                    <li>
+                        <a href="/user/photo">流年似水</a>
+                    </li>
+                    <li>
+                        <a href="/user/me">关于博主</a>
+                    </li>
+                    <li class="hidden-index active">
+                        <a href="/user/chatindex">聊天室</a>
+                    </li>
+                </ul>
+                <form class="navbar-form visible-xs" action="/user/searchList" method="post">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="请输入关键字" maxlength="20"
+                               autocomplete="off">
+                        <span class="input-group-btn">
+					            <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+<!--小人-->
+<div id="spig" class="spig">
+    <div id="message"
+         style="background-color: rgb(248, 246, 246);border: 1px solid rgb(53, 157, 138);box-shadow: rgb(59, 204, 176) 2px 1px 8px;"></div>
+    <div id="mumu" class="mumu"></div>
+</div>
+<!--小人end*-->
+<div style="text-align:center;clear:both"></div>
+<div id="disTemp"></div>
+<section class="container" style="z-index: 99;">
+    <div class="content-wrap">
+        <div class="content" style="margin: 0 auto;">
+            <div class="col-lg-12" style="margin: 0 auto;">
+                <div class="mdui-container container_text">
+                    <div class="mdui-row">
+                        <div class="mdui-col-xs-12 mdui-col-sm-6">
+                            <div style="width: 100%;text-align: center;" id="huanYing">
+                                <div class="mdui-textfield-floating-label"
+                                     style="margin: 0 auto;margin-top:26px;height: 40px;width: 58%;line-height: 40px;border-radius: 6px;">
+                                    <i class="mdui-icon material-icons" id="ip_add"
+                                       style="font-family:楷体;color: white;font-size: 22px;background-color: #ff00005c;padding: 4px 7PX;border-radius: 4px">
+                                        MY-IP: </i>
+                                    <i class="mdui-icon" id="username" th:text="${username}"
+                                       style="color:white; background-color: #ff00005c;padding: 4px;border-radius: 4px;font-size: 22px"></i>
+                                </div>
+                            </div>
+                            <div style="margin-top: 16px;width: 100%">
+                                <div id="sendMsgPos" class="mdui-textfield mdui-textfield-floating-label">
+                                    <i class="mdui-icon material-icons" style="color: #03a4e8">sms</i>
+                                    <label id="fasong" class="mdui-textfield-label">发送内容</label>
+                                    <input class="mdui-textfield-input" id="msg"/>
+                                </div>
+                                <div class="mdui-container" style="padding:10px 70px;text-align: center">
+                                    <button class="btn btn-success" id="sendChat" onclick="sendMsgToServer()"
+                                            style="background-color: #03a4e8;padding-left: 22px;padding-right: 22px;margin-top: 10px;border:1px solid white">
+                                        发&nbsp;&nbsp;送
+                                    </button>
+                                    <button class="btn btn-warning" id="clearBoard" onclick="clearMsg()"
+                                            style="padding-left: 22px;padding-right: 22px;margin-top: 10px;background-color: #03a4e8;border:1px solid white;margin-right: 140px">
+                                        清&nbsp;&nbsp;屏
+                                    </button>
+                                </div>
+                                <div id="tempPos"></div>
+                                <div id="musicTemp">
+                                    <audio autoplay="autoplay" controls="controls" loop="loop" style="z-index: 99;"
+                                           id="musicPos">
+                                        <source th:src="@{${myMusic.musicSrc}}">
+                                    </audio>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mdui-col-xs-12 mdui-col-sm-6">
+                            <div style="padding:10px 0;text-align:center;width: 100%">
+                                <div class="mdui-chip" style="margin-top:20px">
+                                <span class="mdui-chip-icon mdui-color-light-blue">
+                                    <i class="glyphicon glyphicon-comment" style="color: white"></i>
+                                </span>
+                                    <span class="mdui-chip-title">聊天内容&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </div>
+                                <div class="mdui-chip">
+                                    <span class="mdui-chip-icon mdui-color-light-blue">
+                                    <i class="glyphicon glyphicon-user" style="color: white"></i></span>
+                                    <span class="mdui-chip-title">在线人数</span>
+                                    <span class="mdui-chip-title chat-num"
+                                          style="padding-left:0px;padding-right: 9px">0</span>
+                                </div>
+                                <div class="message-container" id="userChat"
+                                     style="max-height: 510px;overflow: auto;text-align: left">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div style="margin-top: -210px">
+    <div id="background" class="wall" style="margin-bottom: 60px"></div>
+    <div id="midground" class="wall"></div>
+    <div id="foreground" class="wall"></div>
+    <div id="top" class="wall"></div>
+    <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+    </div>
+</div>
+<footer class="footer" id="Myfooter">
+    <div class="container">
+        <p>&copy;C<font style="text-transform:lowercase;">opyright</font> &nbsp;河南大学 <a href="">2016级软件工程</a> &nbsp; <a
+                href="#" target="_blank" rel="nofollow">syw的博文空间</a> &nbsp; &nbsp;<a
+                href="http://www.beian.miit.gov.cn/" target="_blank">豫ICP备20004461号-1</a></p>
+    </div>
+</footer>
+<script src="/static/user/js/scripts.js"></script>
+<script type="text/javascript" src="/static/user/js/jquery.nicescroll.js"></script>
+<script th:inline="javascript">
+    /**
+     * WebSocket客户端
+     *
+     * 使用说明：
+     * 1、WebSocket客户端通过回调函数来接收服务端消息。例如：webSocket.onmessage
+     * 2、WebSocket客户端通过send方法来发送消息给服务端。例如：webSocket.send();
+     */
+    function getWebSocket() {
+        /**
+         * WebSocket客户端 PS：URL开头表示WebSocket协议 中间是域名端口 结尾是服务端映射地址
+         */
+        var webSocket = new WebSocket(/*[[${webSocketUrl}]]*/ 'ws://localhost:80/chat');
+        /**
+         * 当服务端打开连接
+         */
+        webSocket.onopen = function (event) {
+            console.log('WebSocket打开连接');
+        };
+
+        /**
+         * 当服务端发来消息：1.广播消息 2.更新在线人数
+         */
+        webSocket.onmessage = function (event) {
+            //获取服务端消息
+            var message = JSON.parse(event.data) || {};
+            var $messageContainer = $('.message-container');
+            if (message.type === 'SPEAK') {
+                $messageContainer.append(
+                    '<div class="mdui-card" style="margin: 10px 0;opacity: 0.7">' +
+                    '<div class="mdui-card-primary">' +
+                    '<div class="mdui-card-content message-content" style="padding:2px">' + message.username + "：" + message.msg + '</div>' +
+                    '</div></div>');
+            }
+            $('.chat-num').text(message.onlineCount);
+        };
+
+        /**
+         * 关闭连接
+         */
+        webSocket.onclose = function (event) {
+            console.log('WebSocket关闭连接');
+        };
+
+        return webSocket;
+    }
+
+    var webSocket = getWebSocket();
+
+    /**
+     * 通过WebSocket对象发送消息给服务端
+     */
+    function sendMsgToServer() {
+        var $message = $('#msg');
+        if ($message.val()) {
+            webSocket.send(JSON.stringify({username: $('#username').text(), msg: $message.val()}));
+            $message.val(null);
+        }
+
+    }
+
+    /**
+     * 清屏
+     */
+    function clearMsg() {
+        $(".message-container").empty();
+    }
+
+    /**
+     * 使用ENTER发送消息
+     */
+    document.onkeydown = function (event) {
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        e.keyCode === 13 && sendMsgToServer();
+    };
+    $("#userChat").niceScroll({
+        cursorcolor: "#f5eff1",
+        cursoropacitymax: 1,
+        touchbehavior: false,
+        cursorwidth: "0px",
+        cursorborder: "0",
+    });
+</script>
+</body>
+</html>
+
+

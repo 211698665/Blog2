@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>博文空间管理系统</title>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/lib/summernote/prettify.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/lib/summernote/gruvbox-dark.css">
+    <link rel="stylesheet" href="/static/admin/lib/summernote/summernote.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/font-awesome.min.css">
+    <link rel="apple-touch-icon-precomposed" href="/static/admin/images/icon/icon.png">
+    <link rel="shortcut icon" href="/static/admin/images/icon/favicon.ico">
+    <script src="/static/admin/js/jquery-2.1.4.min.js"></script>
+    <style>
+        .add-article-box {
+            margin-bottom: 11px;
+        }
+
+        img[src=""], img:not([src]) {
+            opacity: 0;
+        }
+
+        h2, h3, h4, h5 {
+            line-height: 2.0;
+        }
+    </style>
+</head>
+<body class="user-select">
+<section class="container-fluid">
+    <header>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span
+                            class="sr-only">切换导航</span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                        <span class="icon-bar"></span></button>
+                    <div style="height: 50px;text-align: center;line-height: 50px;width: 200px">
+                        <img src="/static/user/images/logo2.png" alt="" style="height: 80%;">
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">欢迎：<span style="color: red"
+                                                              th:text="${session.user.userName}"> </span></a>
+
+                        </li>
+                        <li>
+                            <a href="/admin/login" onClick="if(!confirm('是否确认退出？'))return false;">退出登录</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="row">
+        <aside class="col-sm-3 col-md-2 col-lg-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/admin/index">首页</a>
+                </li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="active">
+                    <a href="/admin/article">文章</a>
+                </li>
+                <li>
+                    <a href="/admin/sort">类别</a>
+                </li>
+                <li>
+                    <a href="/admin/photo">相册</a>
+                </li>
+                <li>
+                    <a href="/admin/notice">公告</a>
+                </li>
+                <li>
+                    <a href="/admin/comment">评论</a>
+                </li>
+                <li>
+                    <a href="/admin/music">音乐</a>
+                </li>
+
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a href="/admin/saying">每日一言</a>
+                </li>
+                <li>
+                    <a href="/admin/timeline">程序历程</a>
+                </li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li>
+                    <a class="dropdown-toggle" id="userMenu" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">我的</a>
+                    <ul class="dropdown-menu" aria-labelledby="userMenu">
+                        <li>
+                            <a href="/admin/ability">实战技能</a>
+                        </li>
+                        <li>
+                            <a href="/admin/detail">个人资料</a>
+                        </li>
+                        <li>
+                            <a href="/admin/flink">友情链接</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+            <div class="row">
+                <form action="/admin/addArticle" enctype="multipart/form-data" method="post" class="add-article-form">
+                    <div class="col-md-8" style="padding-left:20px">
+
+                        <h1 class="page-header" style="text-align: center;margin-bottom: 10px">内容添加</h1>
+                        <div class="m">
+                            <textarea class="summernote form-control" name="articleContent"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <h1 class="page-header" style="text-align: center;margin-bottom: 10px">其他添加</h1>
+                        <span><b>标题</b></span>
+                        <div class="form-group">
+                            <input type="text" id="article-title" name="articleTitle" class="form-control"
+                                   placeholder="在此处输入标题" required autofocus autocomplete="off">
+                        </div>
+                        <span><b>图片</b></span>
+                        <div class="add-article-box">
+                            <div class="add-article-box-content" style="height: 70px;">
+                                <div class="input-group" style="height: 40px;float: left; width: 80%;margin-top: 8px;">
+                                    <input type="file" id="url1" name="photoFile"
+                                           style="height: 0px; width: 1px; margin: 0px; " value=""/>
+                                    <input type="text" id="url2" name="articleImage" style="height: 40px;"
+                                           class="form-control">
+                                    <span class="input-group-btn">
+                        <button class="btn btn-default" style="height: 40px;" onclick="getfils()"
+                                type="button">+浏览上传</button>
+                    </span>
+                                </div>
+                                <!-- /input-group -->
+                                <div style="width: 16%;float: right; height: 50px;">
+                                    <img src="" id="img" style="height: 50px; width: 100%;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <span><b>摘要</b></span>
+                        <div class="add-article-box">
+                            <div class="add-article-box-content">
+                                <textarea class="form-control" name="articleSummary" autocomplete="off"></textarea>
+                            </div>
+                        </div>
+                        <span><b>分类</b></span>
+                        <div class="add-article-box">
+                            <div class="add-article-box-content">
+                                <select id="category-fname" class="form-control" name="articleCategory">
+                                    <option th:each="allcategory:${allcategorys}" th:value="${allcategory.categoryId}"
+                                            th:text="${allcategory.categoryName }"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <span><b>关键字</b></span>
+                        <div class="add-article-box">
+                            <div class="add-article-box-content">
+                                <input type="text" class="form-control" placeholder="请输入关键字,用英文逗号隔开"
+                                       name="articleKeyword" required autofocus autocomplete="off">
+                            </div>
+                        </div>
+                        <span><b>状态</b></span>
+                        <div class="add-article-box" style="height: 40px">
+                            <div class="add-article-box-content">
+                                <ul class="category-list">
+                                    <li style="float: left">
+                                        <label>
+                                            <input name="articleStatus" type="radio" value="1">
+                                            正常 <em class="hidden-md">( 状态ID: <span>1</span> )&nbsp;&nbsp;</em></label>
+                                    </li>
+                                    <li style="float: left">
+                                        <label>
+                                            <input name="articleStatus" type="radio" value="2">
+                                            异常<em class="hidden-md">( 状态ID: <span>2</span> )</em></label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="add-article-box" style="text-align: center;">
+                            <button class="btn btn-primary btn-lg btn-block" type="submit" name="submit">发&nbsp;布
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="/static/admin/js/bootstrap.min.js"></script>
+<script src="/static/admin/js/admin-scripts.js"></script>
+<!--summernote富文本编辑器-->
+<script src="/static/admin/lib/summernote/prettify.js"></script>
+<script src="/static/admin/lib/summernote/summernote.js"></script>
+<script src="/static/admin/lib/summernote/summernote-zh-CN.js"></script>
+<script src="/static/admin/lib/summernote/summernote-ext-highlight.js"></script>
+<script src="/static/admin/lib/summernote/highlight.pack.js"></script>
+<script>
+
+    $(function () {
+        $('.summernote').summernote({
+            height: 524,
+            minHeight: 524,
+            tabsize: 2,
+            focus: true,
+            prettifyHtml: true,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['highlight', ['highlight']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ],
+            lang: 'zh-CN',
+            callbacks: {
+                onImageUpload: function (files) {
+                    //上传图片到服务器，使用了formData对象，至于兼容性...据说对低版本IE不太友好
+                    var formData = new FormData();
+                    formData.append('file', files[0]);
+                    $.ajax({
+                        url: '/admin/multiUpload',//后台文件上传接口
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            $('.summernote').summernote('insertImage', data, 'img');
+                        }
+                    });
+                }
+            }
+        });
+        hljs.initHighlightingOnLoad();
+    });
+
+    //下面实现了图片的预览
+    function getfils() {
+        $('input[id=url1]').click();
+        $('input[id=url1]').change(function () {
+            $('#url2').val($(this).val());
+        });
+    }
+
+    $("#url1").change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#img").attr("src", objUrl);
+        }
+    });
+
+    function getObjectURL(file) {
+        var url = null;
+        // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+</script>
+</body>
+
+</html>

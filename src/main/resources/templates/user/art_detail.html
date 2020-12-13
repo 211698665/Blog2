@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>syw的博文空间</title>
+    <link rel="apple-touch-icon-precomposed" href="/static/user/images/icon/icon.png">
+    <link rel="shortcut icon" href="/static/user/images/icon/favicon.ico">
+    <link rel="stylesheet" href="/static/user/css/reset.css"/>
+    <link rel="stylesheet" href="/static/user/css/baguetteBox.min.css"/>
+    <link rel="stylesheet" href="/static/user/css/smohan.pop&share.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/admin/lib/summernote/gruvbox-dark.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/nprogress.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/skPlayer.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/lib/summernote/gruvbox-dark.css">
+    <link rel="stylesheet" href="/static/user/css/cl-css.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/user/css/style.css">
+    <link rel="stylesheet" href="/static/user/css/share.css"/>
+    <script src="/static/user/js/jquery-2.1.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <link rel="stylesheet" href="/static/user/css/art-detail.css"/>
+    <script src="/static/user/js/nprogress.js"></script>
+    <script src="/static/admin/lib/summernote/highlight.pack.js"></script>
+    <script src="/static/user/js/jquery.lazyload.min.js"></script>
+    <script type="text/javascript" src="/static/user/js/skPlayer.min.js"></script>
+    <link rel="stylesheet" href="/static/user/css/main.css"/>
+    <script type="text/javascript" src="/static/user/js/theia-sticky-sidebar.js"></script>
+    <style>
+        .content h2, h3, h4, h5 {
+            line-height: 2.0;
+        }
+
+        .sidebar h3 {
+            line-height: 1.1;
+        }
+
+        .article-content p {
+            text-indent: 0px;
+            margin-bottom: 10px;
+        }
+
+        .article-content pre {
+            font-size: 14px;
+            padding: 1px;
+            border-radius: 4px;
+            margin: 4px 0;
+            font-family: Consolas, 'Courier New', monospace;
+        }
+
+        body, html {
+            height: unset;
+        }
+    </style>
+</head>
+<body>
+<header class="header" id="main_top">
+    <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#header-navbar" aria-expanded="false"><span class="sr-only"></span> <span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+                <h1 class="logo hvr-bounce-in"><a href="" title=""><img src="/static/user/images/logo2.png" alt=""
+                                                                        style="height: 80%;"></a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="header-navbar">
+                <ul class="nav navbar-nav navbar-right userMenu">
+                    <li class="hidden-index ">
+                        <a href="/">博客首页</a>
+                    </li>
+                    <li>
+                        <a href="/user/sort">博文分类</a>
+                    </li>
+                    <li>
+                        <a href="/user/time">时光机器</a>
+                    </li>
+                    <li>
+                        <a href="/user/photo">流年似水</a>
+                    </li>
+                    <li>
+                        <a href="/user/me">关于博主</a>
+                    </li>
+                    <li>
+                        <a href="/user/chatindex">聊天室</a>
+                    </li>
+                </ul>
+                <form class="navbar-form visible-xs" action="/user/searchList" method="post">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="请输入关键字" maxlength="20"
+                               autocomplete="off">
+                        <span class="input-group-btn">
+					            <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+						</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+<section class="container">
+    <div class="content-wrap">
+        <div class="content" style="background-color: white">
+            <header class="article-header" style="border-bottom: 0px;padding-bottom: 5px">
+                <h1 class="article-title"><a th:href="@{'/user/artdetail?id='+${artDetail.articleId}}"><span
+                        th:text="${artDetail !=null }?${artDetail.articleTitle }:''"></span></a></h1>
+                <div class="article-meta">
+					<span class="item article-meta-time">
+						  <time class="time" data-toggle="tooltip"><i class="glyphicon glyphicon-time"
+                                                                      style="color: lightpink;"></i><span
+                                  th:text="${artDetail !=null }?${artDetail.articleUpdatetime }:''"></span> </time>
+					</span>
+                    <span class="item article-meta-views" data-placement="bottom">
+						<i class="glyphicon glyphicon-eye-open" style="color: lightblue;"></i> 共<span
+                            th:text="${artDetail !=null }?${artDetail.articleClick }:''"></span>次浏览</span>
+                    <span class="item article-meta-comment" data-placement="bottom"><i
+                            class="glyphicon glyphicon-comment" style="color: lightgreen;"></i> <span
+                            th:text="${commentNum !=null }?${commentNum }:''"></span>条评论</span>
+                    <span class="item article-meta-comment" data-placement="bottom"><a style="color: #999;"
+                                                                                       th:href="@{'/user/pdfDown?id='+${artDetail.articleId}}"><i
+                            class="glyphicon glyphicon-print" style="color: #e7c288;"></i>&nbsp;&nbsp;一键打印</a></span>
+
+                </div>
+            </header>
+            <article class="article-content" th:utext="${artDetail !=null }?${artDetail.articleContent }:''">
+
+            </article>
+            <p class="article-copyright hidden-xs banquan">文章末尾 end——博主syw提醒您：右下方有根据该文章作出的智能推荐哦</p>
+            <div class="article-tags "
+                 style="width: 100%;height: 40px;margin: 10px 0 6px 0;display: inline-block;text-align: center">
+                类别：
+                <a href="javascript:void(0)" rel="tag"
+                   style="background-color: #de8080;border-radius: 10px;height: 27px;"><span
+                        th:text="${artCategory !=null }?${artCategory }:''"></span></a>
+                <span style="width: 6%;display: inline-block"></span>
+                一键分享:
+                <a href="javascript:void(0)" class="share" style="background-color: #FFF0;position: relative;top: 5px">
+                    <span class="fa fa-share-alt" style="font-size: 26px;color: #60d095;"></span>
+                </a>
+            </div>
+            <div id="postcomments">
+                <div id="postcommentstemp">
+                    <div id="waypoint" class="m-margin- animated fadeIn">
+                        <div class="ui container m-opacity box-shadow-max">
+                            <div class="ui bottom attached segment"
+                                 style="border-radius: 2px;border: none;padding-bottom: 0px">
+                                <div id="comment-container" class="ui teal segment"
+                                     style="border-top: 1px solid rgba(34,36,38,.15);box-shadow: none">
+                                    <div th:fragment="commentList">
+                                        <div class="ui threaded comments" style="max-width: 100%;">
+                                            <h3 class="ui dividing header"
+                                                style="padding-bottom: unset;border-bottom: none">
+                                                全部评论
+                                            </h3>
+                                            <div class="comment" th:each="comment : ${comments}">
+                                                <a class="avatar">
+                                                    <img th:src="@{${comment.commentHead}}">
+                                                </a>
+                                                <div class="content"
+                                                     style="min-height: unset;margin-right: unset;margin-bottom: 4px">
+                                                    <a class="author">
+                                                        <span th:text="${comment.commentName}"
+                                                              style="color:#3bcaca">小红</span>
+                                                    </a>
+                                                    <div class="metadata">
+                                                        <span class="date"
+                                                              th:text="${#dates.format(comment.commentCreateTime,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
+                                                    </div>
+                                                    <div class="text" th:text="${comment.commentContent}">
+                                                        愿你走出半生，归来仍是少年！
+                                                    </div>
+                                                    <div class="actions">
+                                                        <a class="reply" data-commentid="1"
+                                                           th:attr="data-commentid=${comment.commentId},data-commentname=${comment.commentName}"
+                                                           onclick="reply(this)">回复</a>
+                                                    </div>
+                                                </div>
+                                                <!--子集评论-->
+                                                <div class="comments"
+                                                     th:if="${#arrays.length(comment.replyComments)}>0">
+                                                    <div class="comment" th:each="reply : ${comment.replyComments}">
+                                                        <a class="avatar">
+                                                            <img th:src="@{${comment.commentHead}}">
+                                                        </a>
+                                                        <div class="content"
+                                                             style="min-height: unset;margin-right: unset;margin-bottom: 2px">
+                                                            <a class="author">
+                                                                <span th:text="${reply.commentName}"
+                                                                      style="color:#3bcaca">小白</span>&nbsp;&nbsp;@
+                                                                &nbsp;<span th:text="${reply.parentCommentName}"
+                                                                            class="m-teal"
+                                                                            style="color:#3bcaca">小红</span>
+                                                            </a>
+                                                            <div class="metadata">
+                                                                <span class="date"
+                                                                      th:text="${#dates.format(reply.commentCreateTime,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
+                                                            </div>
+                                                            <div class="text" th:text="${reply.commentContent}">
+                                                            </div>
+                                                            <div class="actions">
+                                                                <a class="reply" data-commentid="1"
+                                                                   th:attr="data-commentid=${reply.commentId},data-commentname=${reply.commentName}"
+                                                                   onclick="reply(this)">回复</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="comment-form" class="ui form">
+                                    <input type="hidden" name="parentId" value="-1">
+                                    <div class="field">
+                                        <textarea name="commentContent" placeholder="请输入评论信息..."></textarea>
+                                    </div>
+                                    <div class="fields">
+                                        <div class="field m-mobile-wide m-margin-bottom-small">
+                                            <div class="ui left icon input">
+                                                <i class="user icon"></i>
+                                                <input type="text" name="commentName" placeholder="昵称">
+                                            </div>
+                                        </div>
+                                        <div class="field m-mobile-wide m-margin-bottom-small">
+                                            <div class="ui left icon input">
+                                                <i class="fa-qq icon"></i>
+                                                <input type="text" name="commentQq" placeholder="5位以上数字的QQ">
+                                                <input type="text" readonly="readonly" style="display: none"
+                                                       name="articleId"
+                                                       th:value="${artDetail !=null }?${artDetail.articleId }:''">
+                                            </div>
+                                        </div>
+                                        <div class="field  m-margin-bottom-small m-mobile-wide">
+                                            <button id="commentpost-btn" type="button"
+                                                    class="ui teal button m-mobile-wide"
+                                                    style="background-color:#3bcaca"><i class="edit icon"></i>发布
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <aside class="sidebar">
+        <div class="theiaStickySidebar">
+            <div class="">
+                <div class="widget widget-tabs"
+                     style="text-align: center ;padding-left: 130px;padding-top: 30px;height: 328px;margin-top: -1px; border-top:1px solid lightgray;box-sizing: border-box;">
+                    <div style="height: 100px; width: 100px;border-radius: 50px;overflow: hidden;opacity: 0.8 ">
+                        <img th:src="@{${me.userImage}}" style="height: 100px; width: 100px;"/>
+                    </div>
+                    <div style="margin-left: -130px;">
+                        <br/>
+                        <p class="text-primary text-center"
+                           style="font-family: '楷体';font-size: 20px;color: #646869;margin-bottom: 12px;">
+                            <span style="color: #dc4343;font-family: Consolas;border-radius: 4px;padding:0 5px;margin-right: 4px"
+                                  th:text="${me.userName}">SYW</span><b>的博文<span style="color: #3194c2;">空间</span></b>
+                        </p>
+                        <p class="text-info text-center"
+                           style="margin-top: 6px;font-family: '楷体';font-size: 20px; color: #646869;">
+                            Email:<span th:text="${me.userMail}"></span></p>
+                        <p class="text-info text-center" style="margin-top: 10px;">
+                            <a href="#"
+                               style="text-decoration: none ;font-family: '楷体';font-size: 18px; color: #646869;"
+                               th:switch="${me.userSex == 1 }"><b>博主性别</b>: &nbsp;<span th:case="true"
+                                                                                        class="bg-success"
+                                                                                        style="display: inline-block;height: 26px; width: 60px;border-radius:16px;color: #2FC72F;">男</span><span
+                                    th:case="false" class="bg-success"
+                                    style="display: inline-block;height: 26px; width: 60px;border-radius:16px;color: #2FC72F;">女</span></a>
+                        </p>
+                        <p class="text-info text-center" style="margin-top: 10px;">
+
+                            <a href="#"
+                               style="text-decoration: none;font-family: '楷体';font-size: 18px; color: #646869;"><b>博主位置</b>:
+                                &nbsp;<span class="bg-success"
+                                            style="display: inline-block;height: 26px; width: 60px;border-radius: 16px;color: #2FC72F;"
+                                            th:text="${me.userAddress}">南京</span></a>
+                        </p>
+                    </div>
+                </div>
+                <div class="widget widget_search" style="box-sizing: border-box;">
+                    <form class="navbar-form" action="/user/searchList" method="post">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字"
+                                   th:value="${keyword !=null }?${keyword}:''" maxlength="15" autocomplete="off">
+                            <span class="input-group-btn">
+									<button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+								</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="widget widget_medio" style="width: 360px; height: 245px;box-sizing: border-box;">
+                <h3>
+                    <a href="#" style="color: limegreen;">
+                        <span class="glyphicon glyphicon-music"></span>
+                    </a>
+                    &nbsp;&nbsp;动听音乐
+                </h3>
+                <div id="skPlayer" style=""></div>
+            </div>
+            <div class="widget widget_sentence" style="box-sizing: border-box;">
+                <h3>
+                    <a href="#" style="color: mediumpurple;">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </a>
+                    &nbsp;&nbsp;分类标签
+
+                </h3>
+                <div class="widget-sentence-content" style="padding-bottom: 0px;">
+                    <div style="font-size: 16px;height: 214px">
+                        <a th:each="categorylist:${categorysList}" th:class="${categorylist.categoryDesc}"
+                           th:text="${categorylist.categoryName}"
+                           style="font-weight: normal;font-size: 14px;color: white;display: inline-block;margin: 4px 5px;width: 72px;box-shadow: 0px 0px 1px 1px #e7e2ea;"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="widget widget_hot" style="box-sizing: border-box;">
+                <h3>
+                    <a href="#" style="color: red;">
+                        <span class="glyphicon glyphicon-fire"></span>
+                    </a>
+                    &nbsp;&nbsp;热门文章
+                </h3>
+                <ul>
+                    <li th:each="topArticle:${topListHot}">
+                        <a th:href="@{'/user/artdetail?id='+${topArticle.articleId}}">
+							<span class="thumbnail" style="display: inline-block; width: 70px; height: 70px;">
+								<img class="thumb" th:src="@{${topArticle.articleImage}}"
+                                     style="width: 100%; height: 100%;" alt="">
+							</span>
+                            <span style="display: inline-block;height: 2px;padding: 0px;margin: 0px;"></span>
+                            <span class="text"
+                                  style="font-size: 15px; margin-left: -45px; margin-top: -10px;color: #72d0eb;"
+                                  th:text="${topArticle !=null }?${topArticle.articleTitle }:''"></span>
+                            <div style="height: 11px;padding: 0px;margin: 0px;"></div>
+                            <span class="muted" style="margin-left: -45px;">
+								<i class="glyphicon glyphicon-time"></i> <span
+                                    th:text="${topArticle !=null }?${topArticle.articleUpdatetime }:''"></span>
+							</span>
+                            <span class="muted" style="margin-left: 10px;">
+								<i class="glyphicon glyphicon-eye-open"></i> <span
+                                    th:text="${topArticle !=null }?${topArticle.articleClick }:''"></span>
+							</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="widget widget_hot " style="box-sizing: border-box;">
+                <div>
+                    <h3>
+                        <a href="#" style="color: lightseagreen;">
+                            <span class="glyphicon glyphicon-screenshot"></span>
+                        </a>
+                        &nbsp;&nbsp;智能推荐
+                    </h3>
+                    <ul>
+                        <li th:each="advice:${advicesArticle}">
+                            <a th:href="@{'/user/artdetail?id='+${advice.articleId}}">
+							<span class="thumbnail" style="display: inline-block; width: 70px; height: 70px;">
+								<img class="thumb" th:src="@{${advice.articleImage}}" style="width: 100%; height: 100%;"
+                                     alt="">
+							</span>
+                                <span style="display: inline-block;height: 2px;padding: 0px;margin: 0px;"></span>
+                                <span class="text"
+                                      style="font-size: 15px; margin-left: -45px; margin-top: -10px;color: #72d0eb"
+                                      th:text="${advice !=null }?${advice.articleTitle }:''"></span>
+                                <div style="height: 11px;padding: 0px;margin: 0px;"></div>
+                                <span class="muted" style="margin-left: -45px;">
+								<i class="glyphicon glyphicon-time"></i> <span
+                                        th:text="${advice !=null }?${advice.articleUpdatetime }:''"></span>
+								</span>
+                                <span class="muted" style="margin-left: 10px;">
+									<i class="glyphicon glyphicon-eye-open"></i> <span
+                                        th:text="${advice !=null }?${advice.articleClick }:''"></span>
+								</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </aside>
+</section>
+<footer class="footer">
+    <div class="container">
+        <p>&copy;C<font style="text-transform:lowercase;">opyright</font> &nbsp;河南大学 <a href="">2016级软件工程</a> &nbsp; <a
+                href="#" target="_blank" rel="nofollow">syw的博文空间</a> &nbsp; &nbsp;<a
+                href="http://www.beian.miit.gov.cn/" target="_blank">豫ICP备20004461号-1</a></p>
+    </div>
+    <div id="gotop"><a class="gotop"></a></div>
+</footer>
+<script src="/static/user/js/bootstrap.min.js"></script>
+<script src="/static/user/js/systime.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $('.sidebar')
+            .theiaStickySidebar({
+                additionalMarginTop: 54
+            });
+    });
+    //评论表单验证
+    $('.ui.form').form({
+        fields: {
+            title: {
+                identifier: 'commentContent',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入评论内容'
+                }
+                ]
+            },
+            content: {
+                identifier: 'commentName',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入你的大名'
+                }]
+            },
+            articleId: {
+                identifier: 'articleId',
+                rules: [{
+                    type: 'empty',
+                    prompt: ''
+                }]
+            },
+            type: {
+                identifier: 'commentQq',
+                rules: [
+                    {
+                        type: 'number',
+                        prompt: 'QQ必须尤为数字'
+                    },
+                    {
+                        type: 'length[5]',
+                        prompt: "长度不正确"
+                    }
+                ]
+            }
+        }
+    });
+    $('#commentpost-btn').click(function () {
+        var boo = $('.ui.form').form('validate form');
+        if (boo) {
+            postData();
+        }
+    });
+
+    function postData() {
+        $("#comment-container").load(/*[[@{/user/comment}]]*/"", {
+            "parentId": $("[name='parentId']").val(),
+            "commentName": $("[name='commentName']").val(),
+            "commentQq": $("[name='commentQq']").val(),
+            "articleId": $("[name='articleId']").val(),
+            "commentContent": $("[name='commentContent']").val()
+        }, function (responseTxt, statusTxt, xhr) {
+            clearContent();
+        });
+    }
+
+    function clearContent() {
+        $("[name='commentName']").val('');
+        $("[name='commentQq']").val('');
+        $("[name='commentContent']").val('');
+        $("[name='parentId']").val(-1);
+        $("[name='commentContent']").attr("placeholder", "请输入评论信息...");
+    }
+
+    function reply(obj) {
+        var commentId = $(obj).data('commentid');
+        var commentName = $(obj).data('commentname');
+        $("[name='commentContent']").attr("placeholder", "@" + commentName).focus();
+        $("[name='parentId']").val(commentId);
+        $(window).scrollTo($('#comment-form'), 500);
+    }
+</script>
+<script>
+    $(function () {
+        hljs.initHighlightingOnLoad();
+    });
+    var player = new skPlayer({
+        autoplay: false,
+        listshow: true,
+        music: {
+            type: 'file',
+            source: [{
+                name: '飞云之下',
+                author: '林俊杰&韩红',
+                src: '/static/user/music/飞云之下.mp3',
+                cover: '/static/user/images/musicImg/fyzx.png'
+            },
+                {
+                    name: '大鱼',
+                    author: '周深',
+                    src: '/static/user/music/dy.mp3',
+                    cover: '/static/user/images/musicImg/dy.jpg'
+                },
+                {
+                    name: '明天会放晴吗',
+                    author: '桑田佳祐',
+                    src: '/static/user/music/mthfqm.mp3',
+                    cover: '/static/user/images/musicImg/mth.jpg'
+                }
+            ]
+        }
+    });
+</script>
+<script src="/static/user/js/jquery.ias.js"></script>
+<script src="/static/user/js/scripts.js"></script>
+<script type="text/javascript" src="/static/user/js/artdetail.js"></script>
+<script type="text/javascript" src="/static/user/js/share.js"></script>
+<script type="text/javascript">
+    $('.share').shareConfig({
+        Shade: true, //是否显示遮罩层
+        Event: 'click', //触发事件
+        Content: 'Share', //内容DIV ID
+        Title: 'syw的博客' //显示标题
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+html {
+    background-image: url("/static/user/images/bg.jpg");
+    background-size: cover;
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body {
+    background-image: url("/static/user/images/bg.jpg");
+    background-size: cover;
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
