@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@MapperScan("cn.henu.dao") //配置mybatis扫描的mapper路径
+@MapperScan("cn.henu.dao") //配置mybatis扫描mapper
 @EnableCaching
 @EnableTransactionManagement
 public class HenuApplication {
